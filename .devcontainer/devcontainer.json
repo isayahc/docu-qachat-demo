@@ -22,4 +22,10 @@
 
 	// build config for the docker image
 	"build": { "dockerfile": "Dockerfile" },
+
+	// mount the SSH directory on win
+	"mounts": [
+		"type=bind,source=${localWorkspaceFolder},target=/work",
+		"type=bind,source=/home/${localEnv:USER}/.ssh,target=/root/.ssh,readonly"
+	  ]
 }
