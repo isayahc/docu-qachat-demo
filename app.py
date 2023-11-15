@@ -1,4 +1,8 @@
 import gradio as gr
+from dotenv import load_dotenv
+from bs4 import BeautifulSoup
+
+config = load_dotenv(".env")
 
 from langchain.document_loaders import WebBaseLoader
 
