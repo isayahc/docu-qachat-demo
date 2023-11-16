@@ -21,7 +21,7 @@
 	 "customizations": {
 		 // Configure properties specific to VS Code.
 		 "vscode": {
-			 Add the IDs of extensions you want installed when the container is created.
+			//Add the IDs of extensions you want installed when the container is created.
 			"extensions": ["ms-azuretools.vscode-docker"]
 		  }
 	},
@@ -32,6 +32,6 @@
 	// mount the SSH directory on win
 	"mounts": [
 		"type=bind,source=${localWorkspaceFolder},target=/work",
-		"type=bind,source=/home/${localEnv:USER}/.ssh,target=/root/.ssh,readonly"
+		"type=bind,source=/home/${localEnv:USER}/.ssh,target=/home/vscode/.ssh,readonly"
 	  ]
 }
