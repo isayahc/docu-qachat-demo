@@ -1,4 +1,5 @@
 import gradio as gr
+import boto3
 from dotenv import load_dotenv
 from bs4 import BeautifulSoup
 
@@ -21,9 +22,13 @@ from langchain.chains import RetrievalQA
 
 from langchain.prompts import ChatPromptTemplate
 
+
 #web_links = ["https://www.databricks.com/","https://help.databricks.com","https://docs.databricks.com","https://kb.databricks.com/","http://docs.databricks.com/getting-started/index.html","http://docs.databricks.com/introduction/index.html","http://docs.databricks.com/getting-started/tutorials/index.html","http://docs.databricks.com/machine-learning/index.html","http://docs.databricks.com/sql/index.html"]
 #loader = WebBaseLoader(web_links)
 #documents = loader.load()
+
+s3 = boto3.client('s3')
+s3.download_file('rad-rag-demos', 'vectorstores/chroma.sqlite3', './chroma_db/chroma.sqlite3')
 
 db = Chroma(persist_directory="./chroma_db", embedding_function=embeddings)
 db.get()
