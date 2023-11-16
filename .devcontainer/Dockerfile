@@ -1,5 +1,6 @@
 ARG VARIANT="3.10-bookworm"
-FROM mcr.microsoft.com/devcontainers/python:1-${VARIANT}
+#FROM mcr.microsoft.com/devcontainers/python:1-${VARIANT}
+FROM langchain/langchain
 
 # [Optional] Uncomment if you want to install an additional version of node using nvm
 # ARG EXTRA_NODE_VERSION=10
