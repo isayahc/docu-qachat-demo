@@ -3,3 +3,4 @@ chromadb
 langchain
 python-dotenv
 bs4
+gradio
