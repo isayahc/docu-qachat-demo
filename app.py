@@ -2,6 +2,8 @@ import gradio as gr
 import boto3
 from dotenv import load_dotenv
 from bs4 import BeautifulSoup
+from botocore import UNSIGNED
+from botocore.client import Config
 
 config = load_dotenv(".env")
 
@@ -27,7 +29,7 @@ from langchain.prompts import ChatPromptTemplate
 #loader = WebBaseLoader(web_links)
 #documents = loader.load()
 
-s3 = boto3.client('s3')
+s3 = boto3.client('s3', config=Config(signature_version=UNSIGNED))
 s3.download_file('rad-rag-demos', 'vectorstores/chroma.sqlite3', './chroma_db/chroma.sqlite3')
 
 db = Chroma(persist_directory="./chroma_db", embedding_function=embeddings)
