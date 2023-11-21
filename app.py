@@ -44,12 +44,22 @@ db.get()
 
 retriever = db.as_retriever(search_type = "mmr")
 global qa 
+
 memory = ConversationBufferMemory(memory_key="history", input_key="question")
-qa = RetrievalQA.from_chain_type(llm=model_id, chain_type="stuff", retriever=retriever, verbose=True, return_source_documents=True, chain_type_kwargs={
-    "verbose": True,
-    "memory": memory
-}
+
+
+qa = RetrievalQA.from_chain_type(
+    llm=model_id, 
+    chain_type="stuff", 
+    retriever=retriever, 
+    verbose=True, 
+    return_source_documents=True, 
+    chain_type_kwargs={
+            "verbose": True,
+            "memory": memory
+        }
     )
+
 #qa = RetrievalQAWithSourcesChain.from_chain_type(llm=model_id, chain_type="stuff", retriever=retriever, return_source_documents=True)
 
 template = """
