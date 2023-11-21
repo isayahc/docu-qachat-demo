@@ -42,7 +42,7 @@ s3.download_file('rad-rag-demos', 'vectorstores/chroma.sqlite3', './chroma_db/ch
 db = Chroma(persist_directory="./chroma_db", embedding_function=embeddings)
 db.get()
 
-retriever = db.as_retriever()
+retriever = db.as_retriever(search_type = "mmr")
 global qa 
 qa = RetrievalQA.from_chain_type(llm=model_id, chain_type="stuff", retriever=retriever, verbose=True, return_source_documents=True, chain_type_kwargs={
     "verbose": True,
