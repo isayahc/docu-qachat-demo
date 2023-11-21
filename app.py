@@ -22,7 +22,7 @@ from langchain.text_splitter import RecursiveCharacterTextSplitter
 from langchain.chains import RetrievalQA
 from langchain.chains import RetrievalQAWithSourcesChain
 # prompt template
-from langchain.prompts import ChatPromptTemplate
+from langchain.prompts import ChatPromptTemplate, PromptTemplate
 from langchain.memory import ConversationBufferMemory
 # logging
 import logging
@@ -45,8 +45,12 @@ db.get()
 retriever = db.as_retriever(search_type = "mmr")
 global qa 
 
-memory = ConversationBufferMemory(memory_key="history", input_key="question")
+template = """
+{history}
+"""
 
+memory = ConversationBufferMemory(memory_key="history", input_key="question")
+prompt = PromptTemplate(template=template, input_variables=["query"])
 
 qa = RetrievalQA.from_chain_type(
     llm=model_id, 
