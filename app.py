@@ -10,8 +10,6 @@ from botocore.client import Config
 from dotenv import load_dotenv
 from bs4 import BeautifulSoup
 # langchain
-# web loader
-#from langchain.document_loaders import WebBaseLoader
 # HF libraries
 from langchain.llms import HuggingFaceHub
 from langchain.embeddings import HuggingFaceHubEmbeddings
@@ -22,7 +20,7 @@ from langchain.text_splitter import RecursiveCharacterTextSplitter
 from langchain.chains import RetrievalQA
 from langchain.chains import RetrievalQAWithSourcesChain
 # prompt template
-from langchain.prompts import ChatPromptTemplate
+from langchain.prompts import PromptTemplate
 from langchain.memory import ConversationBufferMemory
 # logging
 import logging
@@ -44,13 +42,30 @@ db.get()
 
 retriever = db.as_retriever(search_type = "mmr")
 global qa 
+template = """
+Use the following context (delimited by <ctx></ctx>) and the chat history (delimited by <hs></hs>) to answer the question:
+------
+<ctx>
+{context}
+</ctx>
+------
+<hs>
+{history}
+</hs>
+------
+{question}
+Answer:
+"""
+prompt = PromptTemplate(
+    input_variables=["history", "context", "question"],
+    template=template,
+)
 memory = ConversationBufferMemory(memory_key="history", input_key="question")
 qa = RetrievalQA.from_chain_type(llm=model_id, chain_type="stuff", retriever=retriever, verbose=True, return_source_documents=True, chain_type_kwargs={
     "verbose": True,
     "memory": memory
 }
     )
-#qa = RetrievalQAWithSourcesChain.from_chain_type(llm=model_id, chain_type="stuff", retriever=retriever, return_source_documents=True)
 
 template = """
 
@@ -67,7 +82,7 @@ def bot(history):
     print(*memory)
     sources = [doc.metadata.get("source") for doc in response['source_documents']]
     src_list = '\n'.join(sources)
-    print_this = response['result']+src_list
+    print_this = response['result']+"\n\n\n"+ "\033[1m"+ "Sources: "+"\033[0;0m"+" \n\n"+src_list
 
     history[-1][1] = ""
     for character in print_this:
@@ -76,8 +91,6 @@ def bot(history):
         yield history
 
 def infer(question, history):
-    #logging.basicConfig()
-    #logging.getLogger("langchain.chains.retrieval_qa").setLevel(logging.INFO)
     query =  question
     result = qa({"query": query, "history": history, "question": question})
     return result
