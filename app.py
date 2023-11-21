@@ -44,11 +44,10 @@ db.get()
 
 retriever = db.as_retriever(search_type = "mmr")
 global qa 
+memory = ConversationBufferMemory(memory_key="history", input_key="question")
 qa = RetrievalQA.from_chain_type(llm=model_id, chain_type="stuff", retriever=retriever, verbose=True, return_source_documents=True, chain_type_kwargs={
     "verbose": True,
-    "memory": ConversationBufferMemory(
-        memory_key="history",
-        input_key="question"),
+    "memory": memory
 }
     )
 #qa = RetrievalQAWithSourcesChain.from_chain_type(llm=model_id, chain_type="stuff", retriever=retriever, return_source_documents=True)
@@ -64,8 +63,14 @@ def add_text(history, text):
 
 def bot(history):
     response = infer(history[-1][0], history)
+    print(*response)
+    print(*memory)
+    sources = [doc.metadata.get("source") for doc in response['source_documents']]
+    src_list = '\n'.join(sources)
+    print_this = response['result']+src_list
+
     history[-1][1] = ""
-    for character in response['result']:
+    for character in print_this:
         history[-1][1] += character
         time.sleep(0.05)
         yield history
@@ -75,7 +80,6 @@ def infer(question, history):
     #logging.getLogger("langchain.chains.retrieval_qa").setLevel(logging.INFO)
     query =  question
     result = qa({"query": query, "history": history, "question": question})
-
     return result
 
 css="""
