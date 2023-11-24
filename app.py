@@ -82,7 +82,7 @@ def bot(history):
     print(*memory)
     sources = [doc.metadata.get("source") for doc in response['source_documents']]
     src_list = '\n'.join(sources)
-    print_this = response['result']+"\n\n\n"+ "\033[1m"+ "Sources: "+"\033[0;0m"+" \n\n"+src_list
+    print_this = response['result']+"\n\n\n Sources: \n\n\n"+src_list
 
     history[-1][1] = ""
     for character in print_this:
@@ -101,7 +101,7 @@ css="""
 
 title = """
 <div style="text-align: center;max-width: 700px;">
-    <h1>Chat with PDF</h1>
+    <h1>Chat with your Documentation</h1>
     <p style="text-align: center;">Chat with Documentation, <br />
     when everything is ready, you can start asking questions about the docu ;)</p>
 </div>

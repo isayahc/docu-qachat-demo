@@ -160,7 +160,7 @@ cython_debug/
 #.idea/
 
 # embeddings db
-*.sqlite3
+*.sqlite3*
 *.bin
 bin
 obj
