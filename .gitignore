@@ -162,5 +162,7 @@ cython_debug/
 # embeddings db
 *.sqlite3*
 *.bin
+*.pickle
+chroma_db/*
 bin
 obj
