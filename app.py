@@ -63,14 +63,11 @@ prompt = PromptTemplate(
 memory = ConversationBufferMemory(memory_key="history", input_key="question")
 qa = RetrievalQA.from_chain_type(llm=model_id, chain_type="stuff", retriever=retriever, verbose=True, return_source_documents=True, chain_type_kwargs={
     "verbose": True,
-    "memory": memory
+    "memory": memory,
+    "prompt": prompt
 }
     )
 
-template = """
-
-
-"""
 
 def add_text(history, text):
     history = history + [(text, None)]
